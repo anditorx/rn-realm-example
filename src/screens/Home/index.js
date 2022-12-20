@@ -5,66 +5,80 @@ import {
   StatusBar,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
+  StyleSheet,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {windowWidth} from '../../utils';
+import {showToast, windowHeight, windowWidth} from '../../utils';
 import {colors} from '../../res';
 import {useSelector} from 'react-redux';
 import {queryAllUserLists} from '../../db/user_schemas';
+import {CardView} from '../../components';
 
 const Home = ({route}) => {
-  const [userList, setUserList] = useState(null);
-  const {numSlice, setNumSlice} = useState(4);
+  const [data, setData] = useState(route?.params);
+  const [currentLimit, setCurrentLimit] = useState(5);
+  const [maxLimit, setMaxLimit] = useState(route?.params?.length);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(3000).then(() => getData(5));
   }, []);
 
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
   // NOTE: Get Data
-  const getData = () => {
-    setIsLoading(true);
+  const getData = limit => {
     // NOTE: Get Data Realm
     queryAllUserLists()
-      .then(res => setUserList(res))
-      .catch(e => console.tron.log('🚀 ~ error :=>', e.message));
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+      .then(res => (setData(res), setCurrentLimit(limit), setRefreshing(false)))
+      .catch(e => showToast(e.message, '', 'danger'));
   };
-  const renderList = ({item}) => {
-    return (
-      <View
-        style={{
-          height: 100,
-          backgroundColor: colors.greyLowOpacity,
-          padding: 20,
-          marginVertical: 5,
-          width: windowWidth - 40,
-          justifyContent: 'center',
-          alignSelf: 'center',
-          borderRadius: 15,
-        }}>
-        <Text style={{color: 'black'}}>{item?.user_fullname}</Text>
-        <Text style={{color: 'black'}}>{item?.user_phone}</Text>
-      </View>
-    );
+
+  const loadMoreData = () => {
+    if (currentLimit <= maxLimit) {
+      setTimeout(() => {
+        let limit = currentLimit + 5;
+        getData(limit);
+      }, 2000);
+    }
   };
+
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={'dark-content'} backgroundColor="white" />
+
       {isLoading ? (
         <View>
           <ActivityIndicator size="large" color="#000" />
         </View>
       ) : (
-        <View style={{flex: 1}}>
+        <View style={styles.flex}>
           <FlatList
-            data={userList?.slice(0, numSlice)}
-            renderItem={renderList}
-            keyExtractor={item => item.user_id}
-            // maxToRenderPerBatch={5}
+            // data={data}
+            data={data?.slice(0, currentLimit)}
+            renderItem={({item}) => <CardView item={item} />}
+            keyExtractor={(item, index) => index}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            ListFooterComponent={() => {
+              return currentLimit <= maxLimit ? (
+                <View style={styles.wrapperLoading}>
+                  <ActivityIndicator size="large" color="#000" />
+                </View>
+              ) : null;
+            }}
+            onEndReached={loadMoreData}
+            onEndReachedThreshold={0.1}
+            maxToRenderPerBatch={5}
+            updateCellsBatchingPeriod={5}
+            initialNumToRender={5}
           />
         </View>
       )}
@@ -73,3 +87,14 @@ const Home = ({route}) => {
 };
 
 export default Home;
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  flex: {
+    flex: 1,
+  },
+  wrapperLoading: {alignSelf: 'center', paddingVertical: 10},
+});

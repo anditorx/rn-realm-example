@@ -18,11 +18,15 @@ import {
   registerUserAction,
   viewAllUserAction,
 } from '../../redux/actions/AuthAction';
+import {createNewUser, queryAllUserLists} from '../../db/user_schemas';
+import {useIsFocused} from '@react-navigation/native';
 
 const Register = ({navigation}) => {
-  const {loadingAuth, listUser} = useSelector(state => state.AuthReducer);
-  const [isSubmitting, setSubmitting] = useState(false);
+  const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [userList, setUserList] = useState(null);
 
   const form = {
     fullName: '',
@@ -41,21 +45,44 @@ const Register = ({navigation}) => {
     password: Yup.string().required('Password is required!'),
   });
 
+  useEffect(() => {
+    getData();
+  }, []);
+
+  // NOTE: Get Data
+  const getData = () => {
+    setIsLoading(true);
+    // NOTE: Get Data Realm
+    queryAllUserLists()
+      .then(res => setUserList(res))
+      .catch(e => showToast(e.message, '', 'danger'));
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  };
+
   //ANCHOR: Handle Submit
-  const handleSubmit = async data => {
-    const data_search = await listUser?.filter(obj =>
+  const handleSubmit = async (data, formikActions) => {
+    const data_search = await userList?.filter(obj =>
       JSON.stringify(obj).toLowerCase().includes(data?.email?.toLowerCase()),
     );
-
     if (data_search?.length > 0) {
-      if (data_search[0].email === data.email.toLowerCase()) {
+      if (data_search[0].user_email === data.email.toLowerCase()) {
         showToast('Email already exists', '', 'danger');
       }
-      if (data_search[0].phoneNumber === data.phoneNumber) {
+      if (data_search[0].user_phone === data.phoneNumber) {
         showToast('Phone number already exists', '', 'danger');
       }
     } else {
-      dispatch(registerUserAction(data, navigation));
+      // dispatch(registerUserAction(data, navigation));
+      createNewUser(data)
+        .then(res =>
+          setTimeout(() => {
+            showToast('Register Success', '', 'success');
+            formikActions.resetForm();
+          }, 2000),
+        )
+        .catch(e => showToast(e.message, '', 'danger'));
     }
   };
 
@@ -81,12 +108,12 @@ const Register = ({navigation}) => {
                   address: values.address,
                   password: values.password,
                 };
-                handleSubmit(data);
+                handleSubmit(data, formikActions);
                 setTimeout(() => {
-                  formikActions.resetForm();
-                  formikActions.setSubmitting(loadingAuth);
+                  formikActions.setSubmitting(isSubmitting);
+                  // formikActions.resetForm();
                   // setSubmitting(false);
-                }, 5000);
+                }, 3000);
               }}>
               {({
                 values,
@@ -116,6 +143,7 @@ const Register = ({navigation}) => {
                       error={touched.phoneNumber && errors.phoneNumber}
                       onChangeText={handleChange('phoneNumber')}
                       onBlur={handleBlur('phoneNumber')}
+                      keyboardType={'phone-pad'}
                     />
                     <Input
                       label={'Email'}
@@ -141,6 +169,7 @@ const Register = ({navigation}) => {
                       error={touched.password && errors.password}
                       onChangeText={handleChange('password')}
                       onBlur={handleBlur('password')}
+                      password
                     />
                     <Gap height={35} />
                     <Button

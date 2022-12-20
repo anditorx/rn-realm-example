@@ -53,7 +53,6 @@ export const viewAllUserAction = () => {
     //   dispatch({type: ActionTypes.GET_USER_LIST_REQUEST});
     //   const realms = new Realm({path: 'DB_Test.realm'});
     //   const user_details = realms.objects('user_details');
-    //   console.tron.log('🚀 ~ user_details length :=>', user_details.length);
     //   if (user_details.length > 0) {
     //     dispatch({
     //       type: ActionTypes.GET_USER_LIST_SUCCESS,

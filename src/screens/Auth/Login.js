@@ -25,7 +25,6 @@ import {UserSchema} from '../../db/realm';
 import {createUserDummy, queryAllUserLists} from '../../db/user_schemas';
 
 const Login = ({navigation}) => {
-  // const {listUser, loadingAuth} = useSelector(state => state.AuthReducer);
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -44,13 +43,11 @@ const Login = ({navigation}) => {
   });
 
   useEffect(() => {
-    let unsubsribed = false;
-    getData();
-    // return () => {
-    //   unsubsribed = true;
-    // };
+    if (isFocused) {
+      getData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFocused]);
 
   // NOTE: Get Data
   const getData = () => {
@@ -60,7 +57,7 @@ const Login = ({navigation}) => {
       .then(res =>
         res?.length === 0 ? createUserWithDummyData() : setUserList(res),
       )
-      .catch(e => console.tron.log('🚀 ~ error :=>', e.message));
+      .catch(e => showToast(e.message, '', 'danger'));
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -72,7 +69,7 @@ const Login = ({navigation}) => {
     UserListDummy?.map(item => {
       createUserDummy(item)
         .then(res => getData())
-        .catch(e => console.tron.log('🚀 ~ error :=>', e.message));
+        .catch(e => showToast(e.message, '', 'danger'));
     });
     setTimeout(() => {
       setIsLoading(false);
@@ -82,7 +79,6 @@ const Login = ({navigation}) => {
   //ANCHOR: Handle Submit
   const handleSubmit = (data, formikActions) => {
     setIsBtnLoading(true);
-    console.tron.log('🚀 ~ userList :=>', userList);
     const data_search = userList?.filter(obj =>
       JSON.stringify(obj).toLowerCase().includes(data?.email?.toLowerCase()),
     );
@@ -131,10 +127,6 @@ const Login = ({navigation}) => {
                     password: values.password,
                   };
                   handleSubmit(data, formikActions);
-                  // setTimeout(() => {
-                  //   // formikActions.resetForm();
-                  //   // formikActions.setSubmitting(loadingAuth);
-                  // }, 5000);
                 }}>
                 {({
                   values,

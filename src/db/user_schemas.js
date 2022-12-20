@@ -45,7 +45,6 @@ export const createNewUser = newUser =>
               ? realm.objects(REALM_SCHEMA_USER).sorted('user_id', true)[0]
                   .user_id + 1
               : 1;
-
           realm.create(REALM_SCHEMA_USER, {
             user_id: ID,
             user_fullname: newUser?.fullName,
