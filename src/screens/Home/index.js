@@ -14,7 +14,6 @@ import {CardView, Header} from '../../components';
 
 const Home = ({route, navigation}) => {
   const [data, setData] = useState(route?.params);
-  console.tron.log('🚀 ~ route.params :=>', route.params);
   const [currentLimit, setCurrentLimit] = useState(5);
   const [maxLimit, setMaxLimit] = useState(route?.params?.length);
   const [isLoading, setIsLoading] = useState(false);
