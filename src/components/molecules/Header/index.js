@@ -16,7 +16,7 @@ const Header = ({onPress, type, text}) => {
           style={{
             flex: 1,
           }}>
-          <Text style={{fontSize: 20, color: '#000'}}>Detail</Text>
+          {text && <Text style={styles.title}>{text}</Text>}
         </View>
       </View>
     );

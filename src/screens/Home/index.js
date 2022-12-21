@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   SafeAreaView,
   StatusBar,
   FlatList,
@@ -8,15 +7,14 @@ import {
   RefreshControl,
   StyleSheet,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {showToast, windowHeight, windowWidth} from '../../utils';
-import {colors} from '../../res';
-import {useSelector} from 'react-redux';
+import React, {useState} from 'react';
+import {showToast} from '../../utils';
 import {queryAllUserLists} from '../../db/user_schemas';
 import {CardView, Header} from '../../components';
 
 const Home = ({route, navigation}) => {
   const [data, setData] = useState(route?.params);
+  console.tron.log('🚀 ~ route.params :=>', route.params);
   const [currentLimit, setCurrentLimit] = useState(5);
   const [maxLimit, setMaxLimit] = useState(route?.params?.length);
   const [isLoading, setIsLoading] = useState(false);

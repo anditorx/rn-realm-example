@@ -14,7 +14,11 @@ const User = ({navigation, route}) => {
   const [data, setData] = useState(route?.params);
   return (
     <SafeAreaView>
-      <Header type={'header-detail'} onPress={() => navigation.goBack()} />
+      <Header
+        type={'header-detail'}
+        text="Detail"
+        onPress={() => navigation.goBack()}
+      />
       <View>
         <CardView type="user-detail" item={data} />
       </View>
