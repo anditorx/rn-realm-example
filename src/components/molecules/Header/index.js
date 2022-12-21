@@ -4,7 +4,7 @@ import {IC_BACK, IMG_ACCOUNT_BLACK} from '../../../res';
 import {styles} from './styles';
 
 const Header = ({onPress, type, text}) => {
-  if (type == 'header-detail') {
+  if (type === 'header-detail') {
     return (
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity
@@ -21,7 +21,7 @@ const Header = ({onPress, type, text}) => {
       </View>
     );
   }
-  if (type == 'home') {
+  if (type === 'home') {
     return (
       <View style={styles.containerHome}>
         <Text style={styles.title}>TEST REALM</Text>

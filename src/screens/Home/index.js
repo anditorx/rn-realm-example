@@ -52,7 +52,7 @@ const Home = ({route, navigation}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={'dark-content'} backgroundColor="white" />
-      <Header type={'home'} />
+      <Header type={'home'} onPress={() => navigation.navigate('Profile')} />
       {isLoading ? (
         <View>
           <ActivityIndicator size="large" color="#000" />
