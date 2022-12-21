@@ -18,11 +18,9 @@ Following features were created:
 
 # Screenshots
 
-<img src="https://res.cloudinary.com/dzwztfzvu/image/upload/v1671651771/Screen_Shot_2022-12-22_at_02.28.31_cm3kut.png">
+<img src="https://res.cloudinary.com/dzwztfzvu/image/upload/v1671654020/Screen_Shot_2022-12-22_at_03.19.52_b0n9ta.png">
 
-<img src="https://res.cloudinary.com/dzwztfzvu/image/upload/v1671651813/Screen_Shot_2022-12-22_at_02.43.22_lxkvwu.png">
-
-<img src="https://res.cloudinary.com/dzwztfzvu/image/upload/v1671651771/Screen_Shot_2022-12-22_at_02.35.43_hpez0b.png">
+<!-- ![](https://github.com/Your_Repository_Name/Your_GIF_Name.gif) -->
 
 # Installation
 
@@ -60,9 +58,9 @@ OR
 
 - run the app
 
-  ```bash
-  yarn android
-  ```
+```bash
+yarn android
+```
 
 # Author
 
