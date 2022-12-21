@@ -70,4 +70,4 @@ OR
 
 # Tech Used
 
-![React Native](https://miro.medium.com/max/720/1*safAvjgR68qpQCreDTOcYA.webp) ![Realm](https://webimages.mongodb.com/_com_assets/cms/l0wqwqfmlb2sjq0c4-realm_logo.svg?auto=format%252Ccompress&w=128&quality=75)
+![Realm](https://webimages.mongodb.com/_com_assets/cms/l0wqwqfmlb2sjq0c4-realm_logo.svg?auto=format%252Ccompress&w=128&quality=75)
