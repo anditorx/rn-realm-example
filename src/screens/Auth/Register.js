@@ -8,23 +8,14 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Button, Gap, Header, Input} from '../../components';
-import {responsiveHeight, windowWidth, showToast} from '../../utils';
+import {Button, Gap, Input} from '../../components';
+import {responsiveHeight, showToast} from '../../utils';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {colors} from '../../res';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  registerUserAction,
-  viewAllUserAction,
-} from '../../redux/actions/AuthAction';
 import {createNewUser, queryAllUserLists} from '../../db/user_schemas';
-import {useIsFocused} from '@react-navigation/native';
+import {styles} from './styles';
 
 const Register = ({navigation}) => {
-  const isFocused = useIsFocused();
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
   const [isSubmitting, setSubmitting] = useState(false);
   const [userList, setUserList] = useState(null);
 
@@ -51,14 +42,10 @@ const Register = ({navigation}) => {
 
   // NOTE: Get Data
   const getData = () => {
-    setIsLoading(true);
     // NOTE: Get Data Realm
     queryAllUserLists()
       .then(res => setUserList(res))
       .catch(e => showToast(e.message, '', 'danger'));
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
   };
 
   //ANCHOR: Handle Submit
@@ -74,7 +61,6 @@ const Register = ({navigation}) => {
         showToast('Phone number already exists', '', 'danger');
       }
     } else {
-      // dispatch(registerUserAction(data, navigation));
       createNewUser(data)
         .then(res =>
           setTimeout(() => {
@@ -87,14 +73,12 @@ const Register = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={'dark-content'} backgroundColor="white" />
-      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.flex1} showsVerticalScrollIndicator={false}>
         <Gap height={30} />
-        <View style={{paddingHorizontal: 20}}>
-          <Text style={{color: 'black', fontSize: 35, fontWeight: 'bold'}}>
-            Register
-          </Text>
+        <View style={styles.content}>
+          <Text style={styles.txtLoginTitle}>Register</Text>
 
           <View style={{marginTop: 10}}>
             <Formik
@@ -111,8 +95,6 @@ const Register = ({navigation}) => {
                 handleSubmit(data, formikActions);
                 setTimeout(() => {
                   formikActions.setSubmitting(isSubmitting);
-                  // formikActions.resetForm();
-                  // setSubmitting(false);
                 }, 3000);
               }}>
               {({
@@ -185,8 +167,7 @@ const Register = ({navigation}) => {
         </View>
         <Gap height={20} />
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text
-            style={{textAlign: 'center', fontSize: 14, color: colors.black}}>
+          <Text style={styles.txtCreateAcc}>
             Already have an account? Login
           </Text>
         </TouchableOpacity>

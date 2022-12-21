@@ -2,7 +2,7 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Home, Login, Register} from '../screens';
+import {Home, Login, Profile, Register, User} from '../screens';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +22,16 @@ const Routes = () => {
       <Stack.Screen
         name="Home"
         component={Home}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="User"
+        component={User}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

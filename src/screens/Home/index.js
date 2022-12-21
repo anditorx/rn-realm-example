@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   SafeAreaView,
   StatusBar,
   FlatList,
@@ -8,15 +7,14 @@ import {
   RefreshControl,
   StyleSheet,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {showToast, windowHeight, windowWidth} from '../../utils';
-import {colors} from '../../res';
-import {useSelector} from 'react-redux';
+import React, {useState} from 'react';
+import {showToast} from '../../utils';
 import {queryAllUserLists} from '../../db/user_schemas';
-import {CardView} from '../../components';
+import {CardView, Header} from '../../components';
 
-const Home = ({route}) => {
+const Home = ({route, navigation}) => {
   const [data, setData] = useState(route?.params);
+  console.tron.log('🚀 ~ route.params :=>', route.params);
   const [currentLimit, setCurrentLimit] = useState(5);
   const [maxLimit, setMaxLimit] = useState(route?.params?.length);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +50,7 @@ const Home = ({route}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={'dark-content'} backgroundColor="white" />
-
+      <Header type={'home'} onPress={() => navigation.navigate('Profile')} />
       {isLoading ? (
         <View>
           <ActivityIndicator size="large" color="#000" />
@@ -60,9 +58,10 @@ const Home = ({route}) => {
       ) : (
         <View style={styles.flex}>
           <FlatList
-            // data={data}
             data={data?.slice(0, currentLimit)}
-            renderItem={({item}) => <CardView item={item} />}
+            renderItem={({item}) => (
+              <CardView item={item} navigation={navigation} />
+            )}
             keyExtractor={(item, index) => index}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

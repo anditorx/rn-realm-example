@@ -7,26 +7,25 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-import {Button, Gap, Header, Input} from '../../components';
-import {responsiveHeight, showToast, windowWidth} from '../../utils';
+import React, {useEffect, useState} from 'react';
+import {Button, Gap, Input} from '../../components';
+import {styles} from './styles';
+import {
+  getDataStorage,
+  responsiveHeight,
+  showToast,
+  storeDataStorage,
+} from '../../utils';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {colors, UserListDummy} from '../../res';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  registerUserAction,
-  registerUserDummyAction,
-  viewAllUserAction,
-} from '../../redux/actions/AuthAction';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import Realm from 'realm';
-import {UserSchema} from '../../db/realm';
+import {useIsFocused} from '@react-navigation/native';
 import {createUserDummy, queryAllUserLists} from '../../db/user_schemas';
+import {CONSTANT} from '../../constant';
 
 const Login = ({navigation}) => {
   const isFocused = useIsFocused();
-  const dispatch = useDispatch();
+  const [active, setActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [userList, setUserList] = useState(null);
@@ -49,10 +48,35 @@ const Login = ({navigation}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
 
+  useEffect(() => {
+    getUserLogged();
+    if (userList && active) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Home', params: userList}],
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userList, active]);
+
+  // NOTE: Get User Login from Storage
+  const getUserLogged = () => {
+    getDataStorage(CONSTANT.STORAGE_USER_LOGIN)
+      .then(res => {
+        const data = res;
+        if (data) {
+          setActive(true);
+        }
+      })
+      // eslint-disable-next-line handle-callback-err
+      .catch(err => {
+        // error
+      });
+  };
+
   // NOTE: Get Data
   const getData = () => {
     setIsLoading(true);
-    // NOTE: Get Data Realm
     queryAllUserLists()
       .then(res =>
         res?.length === 0 ? createUserWithDummyData() : setUserList(res),
@@ -94,7 +118,9 @@ const Login = ({navigation}) => {
         if (pass === pass_input) {
           showToast('Login Success', '', 'success');
           formikActions.resetForm();
-          navigation.navigate('Home', userList);
+          setActive(true);
+          // NOTE: local storage
+          storeDataStorage(CONSTANT.STORAGE_USER_LOGIN, data_search[0]);
         } else {
           showToast('Invalid email or password', '', 'danger');
         }
@@ -103,19 +129,17 @@ const Login = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle={'dark-content'} backgroundColor="white" />
       {isLoading ? (
         <View>
           <ActivityIndicator size="large" color="#000" />
         </View>
       ) : (
-        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+        <ScrollView style={styles.flex1} showsVerticalScrollIndicator={false}>
           <Gap height={30} />
-          <View style={{paddingHorizontal: 20}}>
-            <Text style={{color: 'black', fontSize: 35, fontWeight: 'bold'}}>
-              LOGIN
-            </Text>
+          <View style={styles.content}>
+            <Text style={styles.txtLoginTitle}>LOGIN</Text>
 
             <View style={{marginTop: 10}}>
               <Formik
@@ -171,10 +195,7 @@ const Login = ({navigation}) => {
           </View>
           <Gap height={20} />
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text
-              style={{textAlign: 'center', fontSize: 14, color: colors.black}}>
-              Create New Account
-            </Text>
+            <Text style={styles.txtCreateAcc}>Create New Account</Text>
           </TouchableOpacity>
           <Gap height={25} />
         </ScrollView>
