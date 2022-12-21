@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   wrapperAvatar: {height: 30, width: 30, borderRadius: 30 / 2},
-  title: {fontSize: 22, fontWeight: 'bold', color: '#ED23D9'},
+  title: {fontSize: 22, fontWeight: 'bold', color: '#000'},
   titleHeaderScreen: {
     textAlign: 'center',
     flex: 1,

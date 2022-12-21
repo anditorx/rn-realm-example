@@ -20,8 +20,6 @@ import {
   viewAllUserAction,
 } from '../../redux/actions/AuthAction';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import Realm from 'realm';
-import {UserSchema} from '../../db/realm';
 import {createUserDummy, queryAllUserLists} from '../../db/user_schemas';
 
 const Login = ({navigation}) => {
