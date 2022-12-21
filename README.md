@@ -20,7 +20,7 @@ Following features were created:
 
 <img src="https://res.cloudinary.com/dzwztfzvu/image/upload/v1671654020/Screen_Shot_2022-12-22_at_03.19.52_b0n9ta.png">
 
-<!-- ![](https://github.com/Your_Repository_Name/Your_GIF_Name.gif) -->
+![](https://github.com/anditorx/my-reactnative-journey/blob/master/Screen%20Recording%202022-12-22%20at%2003.15.53.gif)
 
 # Installation
 
