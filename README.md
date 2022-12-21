@@ -26,7 +26,7 @@ Following features were created:
 
 # Installation
 
-Install podcasts with CocoaPods
+Install
 
 - clone this repo
 
@@ -34,7 +34,7 @@ Install podcasts with CocoaPods
   git clone git@github.com:anditorx/rn-realm-example.git
 ```
 
-- open Podcasts directory
+- open project directory
 
 ```bash
   cd [project directory]
@@ -70,5 +70,4 @@ OR
 
 # Tech Used
 
-![React Native](https://reactnative.dev/img/logo-og.png)
-![Realm](https://webimages.mongodb.com/_com_assets/cms/l0wqwqfmlb2sjq0c4-realm_logo.svg?auto=format%252Ccompress&w=128&quality=75)
+![React Native](https://miro.medium.com/max/720/1*safAvjgR68qpQCreDTOcYA.webp) ![Realm](https://webimages.mongodb.com/_com_assets/cms/l0wqwqfmlb2sjq0c4-realm_logo.svg?auto=format%252Ccompress&w=128&quality=75)
